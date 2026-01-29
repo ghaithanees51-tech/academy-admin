@@ -1,0 +1,872 @@
+@import "tailwindcss";
+
+/* =========================
+   Direction & RTL/LTR Support
+   ========================= */
+[dir="rtl"] { direction: rtl; }
+[dir="ltr"] { direction: ltr; }
+
+/* Logical Properties - Use these classes for proper RTL/LTR support */
+.text-start { text-align: start !important; }
+.text-end { text-align: end !important; }
+
+/* Logical Margin Utilities */
+.ms-auto { margin-inline-start: auto !important; }
+.me-auto { margin-inline-end: auto !important; }
+.ms-1 { margin-inline-start: 0.25rem !important; }
+.ms-2 { margin-inline-start: 0.5rem !important; }
+.ms-3 { margin-inline-start: 0.75rem !important; }
+.ms-4 { margin-inline-start: 1rem !important; }
+.me-1 { margin-inline-end: 0.25rem !important; }
+.me-2 { margin-inline-end: 0.5rem !important; }
+.me-3 { margin-inline-end: 0.75rem !important; }
+.me-4 { margin-inline-end: 1rem !important; }
+
+/* Logical Padding Utilities */
+.ps-2 { padding-inline-start: 0.5rem !important; }
+.ps-3 { padding-inline-start: 0.75rem !important; }
+.ps-4 { padding-inline-start: 1rem !important; }
+.ps-10 { padding-inline-start: 2.5rem !important; }
+.pe-2 { padding-inline-end: 0.5rem !important; }
+.pe-3 { padding-inline-end: 0.75rem !important; }
+.pe-4 { padding-inline-end: 1rem !important; }
+.pe-10 { padding-inline-end: 2.5rem !important; }
+
+/* Logical Position Utilities */
+.start-0 { inset-inline-start: 0 !important; }
+.end-0 { inset-inline-end: 0 !important; }
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: 1rem;
+  z-index: 50;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  transform: translateY(-160%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  opacity: 0;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  opacity: 1;
+  outline: none;
+  box-shadow: 0 14px 28px -12px rgba(15, 23, 42, 0.4);
+}
+
+/* File input styling for RTL */
+[dir="rtl"] input[type="file"]::-webkit-file-upload-button {
+  margin-inline-start: 1rem;
+  margin-inline-end: 0;
+}
+
+[dir="ltr"] input[type="file"]::-webkit-file-upload-button {
+  margin-inline-start: 0;
+  margin-inline-end: 1rem;
+}
+
+/* =========================
+   Theme Variables
+   ========================= */
+:root {
+  --sidebar-w: 260px;
+  --sidebar-collapsed-w: 80px;
+}
+
+/* Ensure the entire app respects theme colors */
+html, body {
+  background: linear-gradient(to bottom right, rgb(238 242 255), rgb(255 255 255), rgb(250 245 255));
+  min-height: 100vh;
+}
+
+[data-theme="dark"] {}
+
+/* Dark theme overrides for common Tailwind classes */
+[data-theme="dark"] .bg-white {}
+
+[data-theme="dark"] .bg-gray-50,
+[data-theme="dark"] .bg-gray-100 {}
+
+[data-theme="dark"] .bg-gray-200 {}
+
+[data-theme="dark"] .text-gray-900,
+[data-theme="dark"] .text-gray-800 {}
+
+[data-theme="dark"] .text-gray-600,
+[data-theme="dark"] .text-gray-700 {}
+
+[data-theme="dark"] .text-gray-500 {}
+
+[data-theme="dark"] .border-gray-100,
+[data-theme="dark"] .border-gray-200,
+[data-theme="dark"] .border-gray-300 {}
+
+/* Dark theme for gradient backgrounds - MainLayout */
+[data-theme="dark"] .content.bg-gradient-to-br.from-gray-100.via-indigo-50.to-purple-50 {}
+
+/* Dark theme for all gradient backgrounds */
+[data-theme="dark"] .bg-gradient-to-br.from-gray-100.via-indigo-50.to-purple-50,
+[data-theme="dark"] .bg-gradient-to-br.from-gray-50,
+[data-theme="dark"] .bg-gradient-to-br.from-gray-100 {}
+
+/* Dark theme for hover states */
+[data-theme="dark"] .hover\:bg-gray-100:hover {}
+
+[data-theme="dark"] .hover\:bg-gray-50:hover {}
+
+/* Dark theme for tables */
+[data-theme="dark"] table {}
+
+[data-theme="dark"] thead {}
+
+[data-theme="dark"] thead.bg-gray-50 {}
+
+[data-theme="dark"] tbody {}
+
+[data-theme="dark"] tbody.bg-white {}
+
+/* Table borders - use same color for th and td */
+[data-theme="dark"] thead th,
+[data-theme="dark"] thead th.border-b,
+[data-theme="dark"] thead th.border-b.border-gray-200 {}
+
+[data-theme="dark"] tbody.divide-y,
+[data-theme="dark"] tbody.divide-y > tr {}
+
+[data-theme="dark"] .divide-y.divide-gray-200 > *,
+[data-theme="dark"] .divide-y.divide-gray-200 > * + * {}
+
+[data-theme="dark"] tr.border-b,
+[data-theme="dark"] tr.border-b.border-gray-200,
+[data-theme="dark"] tbody tr.border-b,
+[data-theme="dark"] tbody tr.border-b.border-gray-200 {}
+
+[data-theme="dark"] .border-b.border-gray-200 {}
+
+[data-theme="dark"] td,
+[data-theme="dark"] tbody td {}
+
+[data-theme="dark"] th {}
+
+[data-theme="dark"] th.text-gray-500,
+[data-theme="dark"] th.text-gray-700 {}
+
+/* =========================
+   Layout Strategy with Logical Properties
+   LTR: sidebar LEFT, content pushes from LEFT
+   RTL: sidebar RIGHT, content pushes from RIGHT
+   ========================= */
+.layout {
+  min-height: 100vh;
+  display: block;
+}
+
+/* Desktop: Push content away from sidebar using logical margin */
+@media (min-width: 1024px) {
+  .topbar {
+    margin-inline-start: var(--sidebar-w);
+    transition: margin-inline-start 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .content {
+    margin-inline-start: var(--sidebar-w);
+    transition: margin-inline-start 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Collapsed sidebar state - reduce margin */
+  .layout.sidebar-collapsed .topbar {
+    margin-inline-start: var(--sidebar-collapsed-w);
+    transition: margin-inline-start 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .layout.sidebar-collapsed .content {
+    margin-inline-start: var(--sidebar-collapsed-w);
+    transition: margin-inline-start 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* =========================
+   Mobile (drawer) - Using Logical Properties
+   ========================= */
+@media (max-width: 1023px) {
+  /* Remove desktop margins on mobile */
+  .topbar,
+  .content {
+    margin-inline-start: 0 !important;
+  }
+
+  /* Off-canvas sidebar using logical properties */
+  .sidebar {
+    position: fixed;
+    inset-inline-start: 0;
+    top: 0;
+    height: 100vh;
+    width: min(85vw, 280px);
+    max-width: 320px;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: none;
+  }
+  
+  /* RTL support */
+  [dir="rtl"] .sidebar {
+    transform: translateX(100%);
+  }
+  
+  .layout.sidebar-mobile-open .sidebar {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px -4px rgba(15, 23, 42, 0.4);
+  }
+  
+  /* RTL shadow on the left side when open */
+  [dir="rtl"] .layout.sidebar-mobile-open .sidebar {
+    box-shadow: -4px 0 24px -4px rgba(15, 23, 42, 0.4);
+  }
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.layout.sidebar-mobile-open .sidebar-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.sidebar-locked {
+  overflow: hidden;
+  touch-action: none;
+}
+
+@media (min-width: 1024px) {
+  .sidebar-overlay {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .content,
+  .topbar,
+  .sidebar-overlay {
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* =========================
+   Regions
+   ========================= */
+.sidebar {
+  position: fixed;
+  inset-inline-start: 0;
+  top: 0;
+  height: 100vh;
+  width: var(--sidebar-w);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  z-index: 40;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              inset-inline-start 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Collapsed sidebar on desktop */
+@media (min-width: 1024px) {
+  .layout.sidebar-collapsed .sidebar {
+    width: auto; /* Auto width to accommodate text labels */
+    min-width: var(--sidebar-collapsed-w);
+    max-width: 200px; /* Limit width for persistent text items */
+  }
+  
+  /* Hide regular text elements when collapsed */
+  .layout.sidebar-collapsed .sidebar .sidebar-text {
+    display: none;
+  }
+  
+  /* Keep persistent text visible when collapsed */
+  .layout.sidebar-collapsed .sidebar .sidebar-text-persistent {
+    display: inline;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  
+  /* Hide section labels when collapsed */
+  .layout.sidebar-collapsed .sidebar .sidebar-section-label {
+    display: none;
+  }
+  
+  /* Hide chevrons when collapsed */
+  .layout.sidebar-collapsed .sidebar .sidebar-chevron {
+    display: none;
+  }
+  
+  /* Hide nested menus when collapsed */
+  .layout.sidebar-collapsed .sidebar .sidebar-submenu {
+    display: none;
+  }
+  
+  /* Style links when collapsed - uniform icon containers */
+  .layout.sidebar-collapsed .sidebar .sidebar-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Links with persistent text need left alignment and padding */
+  .layout.sidebar-collapsed .sidebar .sidebar-link-with-text {
+    justify-content: flex-start;
+    padding-inline-start: 0.75rem;
+    padding-inline-end: 0.75rem;
+    gap: 0.5rem;
+  }
+  
+  /* Ensure all icons are the same size and centered */
+  .layout.sidebar-collapsed .sidebar .sidebar-link > svg,
+  .layout.sidebar-collapsed .sidebar .sidebar-link > span > svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  
+  /* Remove gap when collapsed */
+  .layout.sidebar-collapsed .sidebar .sidebar-link > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Hide footer text when collapsed */
+  .layout.sidebar-collapsed .sidebar .sidebar-footer {
+    text-align: center;
+    font-size: 0;
+  }
+  
+  /* Hide brand text, keep icon centered */
+  .layout.sidebar-collapsed .sidebar > div:first-child {
+    justify-content: center;
+    padding: 0.5rem;
+  }
+  
+  /* Uniform spacing for all menu items when collapsed */
+  .layout.sidebar-collapsed .sidebar ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  /* Ensure list items don't have extra spacing */
+  .layout.sidebar-collapsed .sidebar li {
+    margin: 0;
+  }
+  
+  /* Remove padding from nav container when collapsed */
+  .layout.sidebar-collapsed .sidebar nav {
+    padding: 0;
+  }
+
+  .layout.sidebar-collapsed .sidebar .sidebar-inner {
+    padding-inline: 0.75rem;
+    gap: 1rem;
+  }
+
+  .layout.sidebar-collapsed .sidebar .sidebar-quick-tip {
+    display: none;
+  }
+  
+  /* Show tooltips on hover when collapsed */
+  .layout.sidebar-collapsed .sidebar .sidebar-link:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    inset-inline-start: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-inline-start: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    z-index: 1000;
+    pointer-events: none;
+  }
+}
+
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb { 
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+.sidebar::-webkit-scrollbar-thumb:hover { 
+}
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+
+/* =========================
+   Submenu Styling
+   ========================= */
+.sidebar-submenu {
+  position: relative;
+  padding-inline-start: 0.625rem;
+  margin-inline-start: 1.25rem;
+}
+
+.sidebar-submenu li {
+  position: relative;
+}
+
+.sidebar-submenu a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  font-size: 0.8125rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  white-space: nowrap;
+}
+
+.sidebar-submenu a::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-submenu a:hover {
+  padding-inline-start: 0.875rem;
+}
+
+.sidebar-submenu a:hover::before {
+  width: 7px;
+  height: 7px;
+  inset-inline-start: -0.9rem;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.content {
+  min-height: 100vh;
+  transition: background 0.2s ease;
+}
+
+/* =========================
+   Components
+   ========================= */
+.card {
+  border-radius: 0.75rem;
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card:hover { 
+  box-shadow: 0 10px 20px -5px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+  transform: translateY(-1px);
+}
+
+.dropdown-menu {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+  border-radius: 0.75rem;
+}
+.dropdown-menu a,
+.dropdown-menu button { 
+  text-decoration: none; 
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.dropdown-menu a:hover,
+.dropdown-menu button:hover { text-decoration: none; }
+
+/* Global cursor pointer for interactive elements */
+button, a[href], .sidebar a, .sidebar button { cursor: pointer; }
+
+/* =========================
+   RTL Support - Simplified with Logical Properties
+   ========================= */
+/* Base body alignment - use logical start */
+body {
+  text-align: start;
+}
+
+/* Content area - proper logical alignment */
+.content {
+  text-align: start;
+}
+
+/* Dropdown menus - use logical alignment */
+.dropdown-menu {
+  text-align: start;
+}
+
+/* Primary Button (Facebook Blue) */
+.btn-primary {
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+.btn-primary:hover:not(:disabled) { opacity: 0.9; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* React Select Custom Styling */
+.react-select-container .react-select__control {
+  border-radius: 0.5rem;
+  min-height: 42px;
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.react-select-container .react-select__control:hover {}
+.react-select-container .react-select__control--is-focused {}
+.react-select-container .react-select__placeholder {}
+.react-select-container .react-select__input-container { margin: 0; padding: 0; }
+.react-select-container .react-select__single-value {}
+.react-select-container .react-select__menu {
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  margin-top: 4px;
+  z-index: 9999;
+}
+.react-select-container .react-select__option { padding: 0.625rem 0.75rem; cursor: pointer; font-size: 0.875rem; }
+.react-select-container .react-select__option--is-focused {}
+.react-select-container .react-select__option--is-selected {}
+.react-select-container .react-select__option--is-selected.react-select__option--is-focused {}
+.react-select-container .react-select__indicator-separator {}
+.react-select-container .react-select__clear-indicator { cursor: pointer; padding: 4px; }
+.react-select-container .react-select__clear-indicator:hover {}
+.react-select-container .react-select__dropdown-indicator { padding: 4px; }
+.react-select-container .react-select__dropdown-indicator:hover {}
+
+/* =========================
+   Custom Scrollbar Styling
+   ========================= */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+}
+
+/* Thin Scrollbar for Dropdowns - Enterprise Level */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(203 213 225) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgb(203 213 225);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgb(148 163 184);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:active {
+  background: rgb(100 116 139);
+}
+
+/* =========================
+   Responsive Utilities
+   ========================= */
+/* Small screens - optimize spacing */
+@media (max-width: 640px) {
+  .content-shell {
+    gap: 1rem !important;
+  }
+  
+  /* Ensure tables are scrollable on small screens */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Tablet optimization */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .sidebar {
+    width: min(75vw, 260px);
+  }
+}
+
+/* Large screens - optimize max widths */
+@media (min-width: 1440px) {
+  .content-shell {
+    max-width: 1600px;
+  }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1920px) {
+  .content-shell {
+    max-width: 1800px;
+  }
+}
+
+/* Smooth font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Focus visible for better accessibility */
+*:focus-visible {
+  outline-offset: 2px;
+}
+
+/* Tooltip animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Offcanvas animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInBackdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* =========================
+   Flatpickr Custom Styling
+   ========================= */
+.flatpickr-calendar {
+  background: white;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-radius: 0.75rem;
+  border: 1px solid rgb(226 232 240);
+  padding: 0.5rem;
+  font-family: inherit;
+}
+
+.flatpickr-months {
+  padding: 0.5rem 0;
+}
+
+.flatpickr-month {
+  color: rgb(15 23 42);
+  fill: rgb(15 23 42);
+}
+
+.flatpickr-current-month {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(15 23 42);
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+  fill: rgb(71 85 105);
+  transition: fill 0.2s ease;
+}
+
+.flatpickr-prev-month:hover,
+.flatpickr-next-month:hover {
+  fill: rgb(99 102 241);
+}
+
+.flatpickr-weekdays {
+  margin: 0.5rem 0;
+}
+
+.flatpickr-weekday {
+  color: rgb(71 85 105);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.flatpickr-days {
+  padding: 0.25rem 0;
+}
+
+.flatpickr-day {
+  color: rgb(51 65 85);
+  border-radius: 0.5rem;
+  font-weight: 500;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.flatpickr-day:hover:not(.flatpickr-disabled):not(.selected) {
+  background: rgb(238 242 255);
+  border-color: rgb(238 242 255);
+  color: rgb(99 102 241);
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background: rgb(99 102 241);
+  border-color: rgb(99 102 241);
+  color: white;
+  font-weight: 600;
+}
+
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover {
+  background: rgb(79 70 229);
+  border-color: rgb(79 70 229);
+}
+
+.flatpickr-day.today {
+  border: 2px solid rgb(99 102 241);
+  background: transparent;
+  color: rgb(99 102 241);
+  font-weight: 600;
+}
+
+.flatpickr-day.today:hover {
+  background: rgb(238 242 255);
+  border-color: rgb(99 102 241);
+}
+
+.flatpickr-day.today.selected {
+  background: rgb(99 102 241);
+  color: white;
+  border-color: rgb(99 102 241);
+}
+
+.flatpickr-day.disabled,
+.flatpickr-day.disabled:hover {
+  color: rgb(203 213 225);
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+  color: rgb(148 163 184);
+}
+
+.flatpickr-time {
+  border-top: 1px solid rgb(226 232 240);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.flatpickr-time-separator,
+.flatpickr-am-pm {
+  color: rgb(51 65 85);
+  font-weight: 600;
+}
+
+.numInputWrapper:hover {
+  background: rgb(248 250 252);
+}
+
+.flatpickr-input {
+  cursor: pointer;
+}
+
+.flatpickr-input::-webkit-input-placeholder {
+  color: rgb(148 163 184);
+}
+
+.flatpickr-input::placeholder {
+  color: rgb(148 163 184);
+}
+
+/* Thin Scrollbar Styling for Dropdowns */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.5) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.5);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.7);
+}
+
+/* Hide scrollbar for Firefox when not hovering */
+.scrollbar-thin {
+  overflow-y: auto;
+}
+
+.scrollbar-thin:not(:hover) {
+  scrollbar-color: transparent transparent;
+}

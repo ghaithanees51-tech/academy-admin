@@ -1,0 +1,21 @@
+# Env
+.env
+.env.*
+*.key
+
+# Node build
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+.cache/
+
+# Logs
+*.log
+
+# Editor/OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
