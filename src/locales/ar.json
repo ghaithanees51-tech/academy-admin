@@ -206,7 +206,17 @@
     "deleteFailed": "فشل الحذف",
     "deleteConfirm": "حذف؟",
     "playVideo": "تشغيل الفيديو",
-    "duration": "المدة"
+    "duration": "المدة",
+    "editVideo": "تعديل الفيديو",
+    "captionAr": "التسمية (عربي)",
+    "captionEn": "التسمية (إنجليزي)",
+    "captionArPlaceholder": "التسمية بالعربية",
+    "captionEnPlaceholder": "التسمية بالإنجليزية",
+    "selectDay": "اليوم",
+    "selectCategory": "الفئة",
+    "noDay": "بدون يوم",
+    "updateSuccess": "تم تحديث الفيديو بنجاح.",
+    "updateFailed": "فشل تحديث الفيديو."
   },
   "profile": {
     "myProfile": "ملفي الشخصي",

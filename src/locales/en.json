@@ -206,7 +206,17 @@
     "deleteFailed": "Delete failed",
     "deleteConfirm": "Delete?",
     "playVideo": "Play video",
-    "duration": "Duration"
+    "duration": "Duration",
+    "editVideo": "Edit video",
+    "captionAr": "Caption (Arabic)",
+    "captionEn": "Caption (English)",
+    "captionArPlaceholder": "Caption in Arabic",
+    "captionEnPlaceholder": "Caption in English",
+    "selectDay": "Day",
+    "selectCategory": "Category",
+    "noDay": "No day",
+    "updateSuccess": "Video updated successfully.",
+    "updateFailed": "Failed to update video."
   },
   "profile": {
     "myProfile": "My Profile",

@@ -9,3 +9,4 @@ export {
 export { VideoListPanel } from './VideoListPanel';
 export { VideoUploadPanel } from './VideoUploadPanel';
 export { VideoPlayerModal } from './VideoPlayerModal';
+export { VideoEditModal } from './VideoEditModal';

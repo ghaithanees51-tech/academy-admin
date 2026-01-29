@@ -176,6 +176,44 @@ export async function postVideo(
   });
 }
 
+export interface UpdateVideoPayload {
+  caption_ar?: string | null;
+  caption_en?: string | null;
+  day?: number | null;
+  category?: number | null;
+  thumbnail?: File | null;
+}
+
+export async function updateVideo(id: number, payload: UpdateVideoPayload): Promise<Video> {
+  const url = `${API_BASE_URL}${VIDEOS_BASE}/${id}/`;
+  const token = getAuthToken();
+  if (!token) throw new Error('Authentication required');
+
+  const hasThumbnail = payload.thumbnail != null && payload.thumbnail instanceof File;
+  if (hasThumbnail) {
+    const formData = new FormData();
+    formData.append('caption_ar', payload.caption_ar ?? '');
+    formData.append('caption_en', payload.caption_en ?? '');
+    formData.append('day', payload.day != null ? String(payload.day) : '');
+    formData.append('category', payload.category != null ? String(payload.category) : '');
+    formData.append('thumbnail', payload.thumbnail!);
+    const response = await authenticatedFetch(url, {
+      method: 'PATCH',
+      headers: { ...getAuthHeaders(), Accept: 'application/json' },
+      body: formData,
+    });
+    return handleApiResponse<Video>(response);
+  }
+
+  const { thumbnail: _t, ...jsonPayload } = payload;
+  const response = await authenticatedFetch(url, {
+    method: 'PATCH',
+    headers: { ...getAuthHeaders(), 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(jsonPayload),
+  });
+  return handleApiResponse<Video>(response);
+}
+
 export async function deleteVideo(id: number): Promise<{ ok?: boolean }> {
   const url = `${API_BASE_URL}${VIDEOS_BASE}/${id}/`;
   const response = await authenticatedFetch(url, {

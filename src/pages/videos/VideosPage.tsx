@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft } from 'lucide-react';
-import { VideoListPanel } from './components/VideoListPanel';
+import { VideoListPanel, VideoEditModal } from './components';
 import { VideoUploadPanel } from './components/VideoUploadPanel';
 import { getStoredDayId } from './components/VideoDayPicker';
 import { getStoredCategoryId } from './components/CategoryPicker';
@@ -15,6 +15,7 @@ export default function VideosPage() {
   const [loading, setLoading] = useState(true);
   const [selectedDayId, setSelectedDayId] = useState<string>(() => getStoredDayId());
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(() => getStoredCategoryId());
+  const [editingVideo, setEditingVideo] = useState<Video | null>(null);
 
   const fetchVideos = useCallback(async () => {
     setLoading(true);
@@ -52,6 +53,14 @@ export default function VideosPage() {
     fetchVideos();
   }, [fetchVideos]);
 
+  const handleEdit = useCallback((video: Video) => {
+    setEditingVideo(video);
+  }, []);
+
+  const handleEditSaved = useCallback(() => {
+    fetchVideos();
+  }, [fetchVideos]);
+
   return (
     <div className="flex flex-col min-h-0">
       <div className="flex items-center gap-3 mb-6">
@@ -71,7 +80,7 @@ export default function VideosPage() {
 
       <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
         <div className="flex-1 min-w-0 order-2 lg:order-1">
-          <VideoListPanel videos={videos} loading={loading} onDelete={handleDelete} />
+          <VideoListPanel videos={videos} loading={loading} onDelete={handleDelete} onEdit={handleEdit} />
         </div>
         <div className="w-full lg:w-80 flex-shrink-0 order-1 lg:order-2">
           <VideoUploadPanel
@@ -83,6 +92,13 @@ export default function VideosPage() {
           />
         </div>
       </div>
+
+      <VideoEditModal
+        video={editingVideo}
+        isOpen={editingVideo != null}
+        onClose={() => setEditingVideo(null)}
+        onSaved={handleEditSaved}
+      />
     </div>
   );
 }

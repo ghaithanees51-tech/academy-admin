@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Video } from '../../../services/videosApi';
-import { Trash2, Loader2, VideoOff, Play } from 'lucide-react';
+import { Trash2, Loader2, VideoOff, Play, Pencil } from 'lucide-react';
 import { VideoPlayerModal } from './VideoPlayerModal';
 
 interface VideoListPanelProps {
   videos: Video[];
   loading: boolean;
   onDelete: (id: number) => Promise<void>;
+  onEdit?: (video: Video) => void;
   className?: string;
 }
 
@@ -33,7 +34,7 @@ function formatDuration(seconds: number | null): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-function VideoCard({ video, onDelete }: { video: Video; onDelete: (id: number) => Promise<void> }) {
+function VideoCard({ video, onDelete, onEdit }: { video: Video; onDelete: (id: number) => Promise<void>; onEdit?: (video: Video) => void }) {
   const { t } = useTranslation();
   const [deleting, setDeleting] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -101,6 +102,18 @@ function VideoCard({ video, onDelete }: { video: Video; onDelete: (id: number) =
         )}
       </div>
       <div className="absolute top-2 end-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        {onEdit && (
+          <button
+            type="button"
+            onClick={() => onEdit(video)}
+            disabled={deleting}
+            className="p-2 rounded-lg text-white hover:opacity-90 disabled:opacity-60 transition-colors"
+            style={{ backgroundColor: '#0c4261' }}
+            aria-label={t('videos.editVideo')}
+          >
+            <Pencil className="w-4 h-4" />
+          </button>
+        )}
         {!confirming ? (
           <button
             type="button"
@@ -143,7 +156,7 @@ function VideoCard({ video, onDelete }: { video: Video; onDelete: (id: number) =
   );
 }
 
-export function VideoListPanel({ videos, loading, onDelete, className = '' }: VideoListPanelProps) {
+export function VideoListPanel({ videos, loading, onDelete, onEdit, className = '' }: VideoListPanelProps) {
   const { t } = useTranslation();
   if (loading) {
     return (
@@ -179,7 +192,7 @@ export function VideoListPanel({ videos, loading, onDelete, className = '' }: Vi
     <div className={className}>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {videos.map((video) => (
-          <VideoCard key={video.id} video={video} onDelete={onDelete} />
+          <VideoCard key={video.id} video={video} onDelete={onDelete} onEdit={onEdit} />
         ))}
       </div>
     </div>

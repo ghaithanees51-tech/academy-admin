@@ -383,19 +383,23 @@ const Header = () => {
     }
   };
   
+  const getDisplayName = () => {
+    const firstLast = [user?.first_name, user?.last_name].filter(Boolean).join(' ');
+    return firstLast || user?.name || user?.email?.split('@')[0] || 'User';
+  };
+
   const getUserInitial = () => {
-    if (user?.name) {
-      return user.name.charAt(0).toUpperCase();
+    const displayName = getDisplayName();
+    if (displayName && displayName !== 'User') {
+      return displayName.charAt(0).toUpperCase();
     }
     if (user?.email) {
       return user.email.charAt(0).toUpperCase();
     }
     return 'U';
   };
-  
-  const getUserDisplayName = () => {
-    return user?.name || user?.email?.split('@')[0] || 'User';
-  };
+
+  const getUserDisplayName = () => getDisplayName();
 
   return (
     <header
