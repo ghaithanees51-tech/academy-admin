@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Outlet } from 'react-router-dom';
 import Dashboard from '../pages/home/Dashboard';
 import PhotosPage from '../pages/photos/PhotosPage';
 import VideosPage from '../pages/videos/VideosPage';
@@ -48,7 +48,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'dashboard',
-        element: <Dashboard />,
+        element: <Outlet />,
+        children: [
+          { index: true, element: <Dashboard /> },
+          { path: 'gallery', element: <PhotosPage /> },
+        ],
       },
       {
         path: 'photos',

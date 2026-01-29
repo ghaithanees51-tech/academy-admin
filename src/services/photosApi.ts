@@ -5,7 +5,7 @@
  * Current implementation uses: GET /api/gallery/items/, POST /api/gallery/items/, DELETE /api/gallery/items/:id
  */
 
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, PHOTOS_PAGE_SIZE } from '../config/api';
 import { getAuthToken, authenticatedFetch, handleApiResponse } from '../utils/api';
 
 // --- Types / Interfaces ---
@@ -66,14 +66,21 @@ function getAuthHeaders(): Record<string, string> {
 }
 
 /**
- * GET list of photos.
+ * GET list of photos (paginated).
  * @param day - optional day filter: day id (number) or date string 'YYYY-MM-DD' depending on backend
- * Current backend: day = day id (number). Use no arg for all photos.
+ * @param page - 1-based page number
+ * @param pageSize - items per page (default from VITE_PHOTOS_PAGE_SIZE)
  */
-export async function getPhotos(day?: number | string): Promise<PhotosListResponse> {
-  const url = day != null
-    ? `${API_BASE_URL}${PHOTOS_BASE}/?day=${encodeURIComponent(day)}&page_size=100`
-    : `${API_BASE_URL}${PHOTOS_BASE}/?page_size=100`;
+export async function getPhotos(
+  day?: number | string,
+  page: number = 1,
+  pageSize: number = PHOTOS_PAGE_SIZE
+): Promise<PhotosListResponse> {
+  const params = new URLSearchParams();
+  if (day != null) params.set('day', String(day));
+  params.set('page', String(page));
+  params.set('page_size', String(pageSize));
+  const url = `${API_BASE_URL}${PHOTOS_BASE}/?${params.toString()}`;
   const response = await authenticatedFetch(url, {
     method: 'GET',
     headers: { ...getAuthHeaders(), Accept: 'application/json' },

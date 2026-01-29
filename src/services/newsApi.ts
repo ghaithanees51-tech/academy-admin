@@ -3,7 +3,7 @@
  * Endpoints: GET/POST /api/news/items/, DELETE /api/news/items/:id/, GET stats, days.
  */
 
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, NEWS_PAGE_SIZE } from '../config/api';
 import { getAuthToken, authenticatedFetch, handleApiResponse } from '../utils/api';
 
 export interface Day {
@@ -53,12 +53,22 @@ function getAuthHeaders(): Record<string, string> {
   return { Authorization: `Bearer ${token}` };
 }
 
-export async function getNews(day?: number | string): Promise<NewsListResponse> {
+/**
+ * GET list of news (paginated).
+ * @param day - optional day filter
+ * @param page - 1-based page number
+ * @param pageSize - items per page (default from VITE_NEWS_PAGE_SIZE)
+ */
+export async function getNews(
+  day?: number | string,
+  page: number = 1,
+  pageSize: number = NEWS_PAGE_SIZE
+): Promise<NewsListResponse> {
   const params = new URLSearchParams();
-  params.set('page_size', '100');
   if (day != null && String(day).trim() !== '') params.set('day', String(day));
-  const query = params.toString();
-  const url = `${API_BASE_URL}${NEWS_BASE}${query ? `?${query}` : ''}`;
+  params.set('page', String(page));
+  params.set('page_size', String(pageSize));
+  const url = `${API_BASE_URL}${NEWS_BASE}/?${params.toString()}`;
   const response = await authenticatedFetch(url, {
     method: 'GET',
     headers: { ...getAuthHeaders(), Accept: 'application/json' },

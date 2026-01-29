@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Photo } from '../../../services/photosApi';
-import { Trash2, Loader2, ImageOff } from 'lucide-react';
+import { Trash2, Loader2, ImageOff, Download } from 'lucide-react';
 
 interface PhotoListPanelProps {
   photos: Photo[];
@@ -26,6 +26,56 @@ function formatDate(iso: string): string {
   }
 }
 
+/** Download image as .jpg (converts from .webp if needed) */
+async function downloadAsJpg(fileUrl: string, photoId: number): Promise<void> {
+  const res = await fetch(fileUrl, { mode: 'cors' });
+  const blob = await res.blob();
+  const img = new Image();
+  const objectUrl = URL.createObjectURL(blob);
+  return new Promise((resolve, reject) => {
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          URL.revokeObjectURL(objectUrl);
+          reject(new Error('Canvas not supported'));
+          return;
+        }
+        ctx.drawImage(img, 0, 0);
+        canvas.toBlob(
+          (jpegBlob) => {
+            URL.revokeObjectURL(objectUrl);
+            if (!jpegBlob) {
+              reject(new Error('Failed to create JPEG'));
+              return;
+            }
+            const url = URL.createObjectURL(jpegBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `photo-${photoId}.jpg`;
+            a.click();
+            URL.revokeObjectURL(url);
+            resolve();
+          },
+          'image/jpeg',
+          0.92
+        );
+      } catch (e) {
+        URL.revokeObjectURL(objectUrl);
+        reject(e);
+      }
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('Failed to load image'));
+    };
+    img.src = objectUrl;
+  });
+}
+
 function PhotoCard({
   photo,
   onDelete,
@@ -35,7 +85,26 @@ function PhotoCard({
 }) {
   const { t } = useTranslation();
   const [deleting, setDeleting] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const [confirming, setConfirming] = useState(false);
+
+  const handleDownload = async () => {
+    if (!photo.file_url) return;
+    setDownloading(true);
+    try {
+      await downloadAsJpg(photo.file_url, photo.id);
+    } catch {
+      // Fallback: open in new tab or direct download with .jpg name
+      const a = document.createElement('a');
+      a.href = photo.file_url;
+      a.download = `photo-${photo.id}.jpg`;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.click();
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   const handleDeleteClick = () => {
     setConfirming(true);
@@ -78,21 +147,34 @@ function PhotoCard({
       </div>
       <div className="p-3">
         <p className="text-sm font-medium text-gray-900 truncate" title={dayLabel}>
+          <span className="text-gray-500 font-normal">{t('photos.day', 'Day')}: </span>
           {dayLabel}
         </p>
         <p className="text-xs text-gray-500 mt-0.5">{formatDate(photo.created_at)}</p>
       </div>
       <div className="absolute top-2 end-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         {!confirming ? (
-          <button
-            type="button"
-            onClick={handleDeleteClick}
-            disabled={deleting}
-            className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 disabled:opacity-60 transition-colors"
-            aria-label={t('common.delete')}
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+          <>
+            <button
+              type="button"
+              onClick={handleDownload}
+              disabled={downloading || !photo.file_url}
+              className="p-2 rounded-lg text-white hover:bg-opacity-90 disabled:opacity-60 transition-colors"
+              style={{ backgroundColor: '#0c4261' }}
+              aria-label={t('common.download')}
+            >
+              {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+            </button>
+            <button
+              type="button"
+              onClick={handleDeleteClick}
+              disabled={deleting}
+              className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 disabled:opacity-60 transition-colors"
+              aria-label={t('common.delete')}
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </>
         ) : (
           <>
             <button

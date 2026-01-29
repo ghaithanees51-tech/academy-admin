@@ -189,6 +189,7 @@
   "photos": {
     "title": "Photos",
     "subtitle": "Manage photos by day",
+    "day": "Day",
     "addPhotos": "Add Photos",
     "noPhotosYet": "No photos yet",
     "addUsingPanel": "Add photos using the panel on the right",

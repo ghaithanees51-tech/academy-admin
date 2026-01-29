@@ -57,10 +57,12 @@ An admin-only web application for managing the Fairmart e-commerce platform.
    ```
 
 3. **Configure environment:**
-   Create `.env` file (optional - defaults to window.location.origin):
+   Create `.env` file in the `admin/` folder (optional - defaults to window.location.origin):
    ```env
    VITE_API_URL=http://localhost:8000
+   VITE_PHOTOS_PAGE_SIZE=24
    ```
+   - `VITE_PHOTOS_PAGE_SIZE` – number of photos per page on the Photos page (default: 24).
 
 4. **Start development server:**
    ```bash

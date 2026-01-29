@@ -3,7 +3,7 @@
  * Endpoints: GET/POST /api/video-gallery/items/, DELETE /api/video-gallery/items/:id/, GET stats, days, categories.
  */
 
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, VIDEOS_PAGE_SIZE } from '../config/api';
 import { getAuthToken, authenticatedFetch, handleApiResponse } from '../utils/api';
 
 export interface Video {
@@ -102,17 +102,24 @@ function getAuthHeaders(): Record<string, string> {
 }
 
 /**
- * GET list of videos (same pattern as getPhotos).
+ * GET list of videos (paginated).
  * @param day - optional day id filter
  * @param category - optional category id filter
+ * @param page - 1-based page number
+ * @param pageSize - items per page (default from VITE_VIDEOS_PAGE_SIZE)
  */
-export async function getVideos(day?: number | string, category?: number | string): Promise<VideosListResponse> {
+export async function getVideos(
+  day?: number | string,
+  category?: number | string,
+  page: number = 1,
+  pageSize: number = VIDEOS_PAGE_SIZE
+): Promise<VideosListResponse> {
   const params = new URLSearchParams();
-  params.set('page_size', '100');
   if (day != null && String(day).trim() !== '') params.set('day', String(day));
   if (category != null && String(category).trim() !== '') params.set('category', String(category));
-  const query = params.toString();
-  const url = `${API_BASE_URL}${VIDEOS_BASE}/${query ? `?${query}` : ''}`;
+  params.set('page', String(page));
+  params.set('page_size', String(pageSize));
+  const url = `${API_BASE_URL}${VIDEOS_BASE}/?${params.toString()}`;
   const response = await authenticatedFetch(url, {
     method: 'GET',
     headers: { ...getAuthHeaders(), Accept: 'application/json' },

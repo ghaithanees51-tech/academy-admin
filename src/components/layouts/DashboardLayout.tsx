@@ -29,7 +29,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [logout] = useLogoutMutation();
   
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const isPhotos = location.pathname === '/photos';
+  const isGallery = location.pathname === '/dashboard/gallery' || location.pathname === '/photos';
   const isVideos = location.pathname === '/videos';
   const isNews = location.pathname === '/news';
   const isOpenData = location.pathname === '/open-data';
@@ -97,11 +97,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   Dashboard
                 </Link>
                 <Link 
-                  to="/photos" 
+                  to="/dashboard/gallery" 
                   className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                  style={isPhotos ? { color: '#0c4261', backgroundColor: 'rgba(12, 66, 97, 0.08)' } : { color: '#6b7280' }}
+                  style={isGallery ? { color: '#0c4261', backgroundColor: 'rgba(12, 66, 97, 0.08)' } : { color: '#6b7280' }}
                 >
-                  Photos
+                  Gallery
                 </Link>
                 <Link 
                   to="/videos" 
@@ -235,11 +235,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 Dashboard
               </Link>
               <Link
-                to="/photos"
-                className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600"
+                to="/dashboard/gallery"
+                className="block px-4 py-2 rounded-lg text-sm font-medium"
+                style={isGallery ? { color: '#0c4261', backgroundColor: 'rgba(12, 66, 97, 0.08)' } : { color: '#6b7280' }}
                 onClick={() => setShowMobileMenu(false)}
               >
-                Photos
+                Gallery
               </Link>
               <Link
                 to="/videos"

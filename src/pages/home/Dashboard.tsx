@@ -117,7 +117,7 @@ const Dashboard = () => {
       color: '#0c4261',
       bgColor: 'rgba(12, 66, 97, 0.08)',
       stats: stats.photos,
-      action: '/photos',
+      action: '/dashboard/gallery',
       gradient: 'linear-gradient(135deg, #0c4261 0%, #083140 100%)'
     },
     {
