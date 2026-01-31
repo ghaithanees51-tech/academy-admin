@@ -10,6 +10,10 @@ import { useGetOpenDataStatsQuery } from '../../services/openDataStatsApi';
 import { useGetAuthCodeStatsQuery } from '../../services/authCodesApi';
 import { useGetUsersCountQuery } from '../../services/authApi';
 import { useGetRecentActivityQuery } from '../../services/activityApi';
+import { useGetCompetitionPhotoStatsQuery } from '../../services/competitionPhotoApi';
+import { useGetCompetitionVideoStatsQuery } from '../../services/competitionVideoApi';
+import { useGetAccompanyingExhibitionPhotoStatsQuery } from '../../services/accompanyingExhibitionPhotoApi';
+import { useGetAccompanyingExhibitionVideoStatsQuery } from '../../services/accompanyingExhibitionVideoApi';
 import type { ActivityType } from '../../services/activityApi';
 import { 
   Image, 
@@ -79,6 +83,18 @@ const Dashboard = () => {
   const { data: usersCountData } = useGetUsersCountQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
+  const { data: competitionPhotoStats } = useGetCompetitionPhotoStatsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+  const { data: competitionVideoStats } = useGetCompetitionVideoStatsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+  const { data: accompanyingExhibitionPhotoStats } = useGetAccompanyingExhibitionPhotoStatsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+  const { data: accompanyingExhibitionVideoStats } = useGetAccompanyingExhibitionVideoStatsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const [activityPage, setActivityPage] = useState(1);
   const PAGE_SIZE = 10;
   const { data: recentActivityData } = useGetRecentActivityQuery(
@@ -105,7 +121,23 @@ const Dashboard = () => {
       total: openDataStats?.total_count ?? 0,
       recent: openDataStats?.new_count ?? 0,
       downloads: '—',
-    }
+    },
+    competitionPhotos: {
+      total: competitionPhotoStats?.total_count ?? 0,
+      new: competitionPhotoStats?.new_count ?? 0,
+    },
+    competitionVideos: {
+      total: competitionVideoStats?.total_count ?? 0,
+      new: competitionVideoStats?.new_count ?? 0,
+    },
+    accompanyingExhibitionPhotos: {
+      total: accompanyingExhibitionPhotoStats?.total_count ?? 0,
+      new: accompanyingExhibitionPhotoStats?.new_count ?? 0,
+    },
+    accompanyingExhibitionVideos: {
+      total: accompanyingExhibitionVideoStats?.total_count ?? 0,
+      new: accompanyingExhibitionVideoStats?.new_count ?? 0,
+    },
   };
 
   const modules = [
@@ -151,6 +183,50 @@ const Dashboard = () => {
       bgColor: 'rgba(162, 148, 117, 0.08)',
       stats: stats.openData,
       action: '/open-data',
+      gradient: 'linear-gradient(135deg, #A29475 0%, #8a7d62 100%)'
+    },
+    {
+      id: 'competition-photos',
+      title: t('dashboard.competitionPhotos') || 'Competition Photos',
+      description: t('dashboard.manageCompetitionPhotos') || 'Manage competition photos',
+      icon: Image,
+      color: '#0c4261',
+      bgColor: 'rgba(12, 66, 97, 0.08)',
+      stats: stats.competitionPhotos,
+      action: '/competition/photos',
+      gradient: 'linear-gradient(135deg, #0c4261 0%, #083140 100%)'
+    },
+    {
+      id: 'competition-videos',
+      title: t('dashboard.competitionVideos') || 'Competition Videos',
+      description: t('dashboard.manageCompetitionVideos') || 'Manage competition videos',
+      icon: Video,
+      color: '#A29475',
+      bgColor: 'rgba(162, 148, 117, 0.08)',
+      stats: stats.competitionVideos,
+      action: '/competition/videos',
+      gradient: 'linear-gradient(135deg, #A29475 0%, #8a7d62 100%)'
+    },
+    {
+      id: 'accompanyingexhibition-photos',
+      title: t('dashboard.accompanyingExhibitionPhotos') || 'Accompanying Exhibition Photos',
+      description: t('dashboard.manageAccompanyingExhibitionPhotos') || 'Manage accompanying exhibition photos',
+      icon: Image,
+      color: '#0c4261',
+      bgColor: 'rgba(12, 66, 97, 0.08)',
+      stats: stats.accompanyingExhibitionPhotos,
+      action: '/accompanyingexhibition/photos',
+      gradient: 'linear-gradient(135deg, #0c4261 0%, #083140 100%)'
+    },
+    {
+      id: 'accompanyingexhibition-videos',
+      title: t('dashboard.accompanyingExhibitionVideos') || 'Accompanying Exhibition Videos',
+      description: t('dashboard.manageAccompanyingExhibitionVideos') || 'Manage accompanying exhibition videos',
+      icon: Video,
+      color: '#A29475',
+      bgColor: 'rgba(162, 148, 117, 0.08)',
+      stats: stats.accompanyingExhibitionVideos,
+      action: '/accompanyingexhibition/videos',
       gradient: 'linear-gradient(135deg, #A29475 0%, #8a7d62 100%)'
     }
   ];

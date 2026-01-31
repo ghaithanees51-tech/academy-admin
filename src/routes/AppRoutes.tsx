@@ -4,6 +4,10 @@ import PhotosPage from '../pages/photos/PhotosPage';
 import VideosPage from '../pages/videos/VideosPage';
 import NewsPage from '../pages/news/NewsPage';
 import OpenDataPage from '../pages/open-data/OpenDataPage';
+import CompetitionPhotosPage from '../pages/competition/photos/CompetitionPhotosPage';
+import CompetitionVideosPage from '../pages/competition/videos/CompetitionVideosPage';
+import AccompanyingExhibitionPhotosPage from '../pages/accompanyingexhibition/photos/AccompanyingExhibitionPhotosPage';
+import AccompanyingExhibitionVideosPage from '../pages/accompanyingexhibition/videos/AccompanyingExhibitionVideosPage';
 import Login from '../pages/auth/Login';
 import ForgotPassword from '../pages/auth/ForgotPassword';
 import ResetPassword from '../pages/auth/ResetPassword';
@@ -69,6 +73,22 @@ export const router = createBrowserRouter([
       {
         path: 'open-data',
         element: <OpenDataPage />,
+      },
+      {
+        path: 'competition/photos',
+        element: <CompetitionPhotosPage />,
+      },
+      {
+        path: 'competition/videos',
+        element: <CompetitionVideosPage />,
+      },
+      {
+        path: 'accompanyingexhibition/photos',
+        element: <AccompanyingExhibitionPhotosPage />,
+      },
+      {
+        path: 'accompanyingexhibition/videos',
+        element: <AccompanyingExhibitionVideosPage />,
       },
       {
         path: 'profile',

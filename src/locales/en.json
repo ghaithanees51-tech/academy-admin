@@ -143,7 +143,15 @@
     "weeksAgo": "{{count}} week ago",
     "weeksAgo_other": "{{count}} weeks ago",
     "monthsAgo": "{{count}} month ago",
-    "monthsAgo_other": "{{count}} months ago"
+    "monthsAgo_other": "{{count}} months ago",
+    "competitionPhotos": "Competition Photos",
+    "competitionVideos": "Competition Videos",
+    "manageCompetitionPhotos": "Manage competition photos",
+    "manageCompetitionVideos": "Manage competition videos",
+    "accompanyingExhibitionPhotos": "Accompanying Exhibition Photos",
+    "accompanyingExhibitionVideos": "Accompanying Exhibition Videos",
+    "manageAccompanyingExhibitionPhotos": "Manage accompanying exhibition photos",
+    "manageAccompanyingExhibitionVideos": "Manage accompanying exhibition videos"
   },
   "news": {
     "title": "News",
@@ -174,9 +182,6 @@
     "failedToLoad": "Failed to load open data",
     "deleteFailed": "Delete failed",
     "deleteConfirm": "Delete?",
-    "addOpenData": "Add Open Data",
-    "noDataYet": "No open data yet",
-    "addUsingPanel": "Add open data using the panel on the right",
     "enterOneCaption": "Please enter at least one caption (Arabic or English).",
     "selectDocument": "Please select a document file.",
     "documentAddedSuccess": "Document added successfully.",
@@ -196,6 +201,50 @@
     "failedToLoad": "Failed to load photos",
     "deleteFailed": "Delete failed",
     "deleteConfirm": "Delete?"
+  },
+  "competitionPhotos": {
+    "title": "Competition Photos",
+    "subtitle": "Manage competition photos by day",
+    "addPhotos": "Add Photos",
+    "noPhotosYet": "No photos yet",
+    "addUsingPanel": "Add photos using the panel on the right",
+    "failedToLoad": "Failed to load photos",
+    "deleteFailed": "Delete failed",
+    "deleteConfirm": "Delete?",
+    "day": "Day"
+  },
+  "competitionVideos": {
+    "title": "Competition Videos",
+    "subtitle": "Manage competition videos by day",
+    "addVideos": "Add Videos",
+    "noVideosYet": "No videos yet",
+    "addUsingPanel": "Add videos using the panel on the right",
+    "failedToLoad": "Failed to load videos",
+    "deleteFailed": "Delete failed",
+    "deleteConfirm": "Delete?",
+    "day": "Day"
+  },
+  "accompanyingExhibitionPhotos": {
+    "title": "Accompanying Exhibition Photos",
+    "subtitle": "Manage accompanying exhibition photos by day",
+    "addPhotos": "Add Photos",
+    "noPhotosYet": "No photos yet",
+    "addUsingPanel": "Add photos using the panel on the right",
+    "failedToLoad": "Failed to load photos",
+    "deleteFailed": "Delete failed",
+    "deleteConfirm": "Delete?",
+    "day": "Day"
+  },
+  "accompanyingExhibitionVideos": {
+    "title": "Accompanying Exhibition Videos",
+    "subtitle": "Manage accompanying exhibition videos by day",
+    "addVideos": "Add Videos",
+    "noVideosYet": "No videos yet",
+    "addUsingPanel": "Add videos using the panel on the right",
+    "failedToLoad": "Failed to load videos",
+    "deleteFailed": "Delete failed",
+    "deleteConfirm": "Delete?",
+    "day": "Day"
   },
   "videos": {
     "title": "Videos",

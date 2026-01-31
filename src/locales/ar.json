@@ -143,7 +143,15 @@
     "weeksAgo": "منذ {{count}} أسبوع",
     "weeksAgo_other": "منذ {{count}} أسبوع",
     "monthsAgo": "منذ {{count}} شهر",
-    "monthsAgo_other": "منذ {{count}} شهر"
+    "monthsAgo_other": "منذ {{count}} شهر",
+    "competitionPhotos": "صور المسابقات",
+    "competitionVideos": "فيديوهات المسابقات",
+    "manageCompetitionPhotos": "إدارة صور المسابقات",
+    "manageCompetitionVideos": "إدارة فيديوهات المسابقات",
+    "accompanyingExhibitionPhotos": "صور المعرض المصاحب",
+    "accompanyingExhibitionVideos": "فيديوهات المعرض المصاحب",
+    "manageAccompanyingExhibitionPhotos": "إدارة صور المعرض المصاحب",
+    "manageAccompanyingExhibitionVideos": "إدارة فيديوهات المعرض المصاحب"
   },
   "news": {
     "title": "الأخبار",
@@ -174,9 +182,6 @@
     "failedToLoad": "فشل تحميل البيانات المفتوحة",
     "deleteFailed": "فشل الحذف",
     "deleteConfirm": "حذف؟",
-    "addOpenData": "إضافة بيانات مفتوحة",
-    "noDataYet": "لا توجد بيانات بعد",
-    "addUsingPanel": "أضف البيانات من اللوحة على اليمين",
     "enterOneCaption": "يرجى إدخال تعليق واحد على الأقل (عربي أو إنجليزي).",
     "selectDocument": "يرجى اختيار ملف المستند.",
     "documentAddedSuccess": "تمت إضافة المستند بنجاح.",
@@ -196,6 +201,50 @@
     "failedToLoad": "فشل تحميل الصور",
     "deleteFailed": "فشل الحذف",
     "deleteConfirm": "حذف؟"
+  },
+  "competitionPhotos": {
+    "title": "صور المسابقات",
+    "subtitle": "إدارة صور المسابقات حسب اليوم",
+    "addPhotos": "إضافة صور",
+    "noPhotosYet": "لا توجد صور بعد",
+    "addUsingPanel": "أضف الصور من اللوحة على اليمين",
+    "failedToLoad": "فشل تحميل الصور",
+    "deleteFailed": "فشل الحذف",
+    "deleteConfirm": "حذف؟",
+    "day": "اليوم"
+  },
+  "competitionVideos": {
+    "title": "فيديوهات المسابقات",
+    "subtitle": "إدارة فيديوهات المسابقات حسب اليوم",
+    "addVideos": "إضافة فيديوهات",
+    "noVideosYet": "لا توجد فيديوهات بعد",
+    "addUsingPanel": "أضف الفيديوهات من اللوحة على اليمين",
+    "failedToLoad": "فشل تحميل الفيديوهات",
+    "deleteFailed": "فشل الحذف",
+    "deleteConfirm": "حذف؟",
+    "day": "اليوم"
+  },
+  "accompanyingExhibitionPhotos": {
+    "title": "صور المعرض المصاحب",
+    "subtitle": "إدارة صور المعرض المصاحب حسب اليوم",
+    "addPhotos": "إضافة صور",
+    "noPhotosYet": "لا توجد صور بعد",
+    "addUsingPanel": "أضف الصور من اللوحة على اليمين",
+    "failedToLoad": "فشل تحميل الصور",
+    "deleteFailed": "فشل الحذف",
+    "deleteConfirm": "حذف؟",
+    "day": "اليوم"
+  },
+  "accompanyingExhibitionVideos": {
+    "title": "فيديوهات المعرض المصاحب",
+    "subtitle": "إدارة فيديوهات المعرض المصاحب حسب اليوم",
+    "addVideos": "إضافة فيديوهات",
+    "noVideosYet": "لا توجد فيديوهات بعد",
+    "addUsingPanel": "أضف الفيديوهات من اللوحة على اليمين",
+    "failedToLoad": "فشل تحميل الفيديوهات",
+    "deleteFailed": "فشل الحذف",
+    "deleteConfirm": "حذف؟",
+    "day": "اليوم"
   },
   "videos": {
     "title": "الفيديو",
