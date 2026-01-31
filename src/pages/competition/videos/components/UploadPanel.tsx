@@ -137,13 +137,9 @@ export function UploadPanel({
   const processAndUpload = useCallback(
     async (files: File[]) => {
       if (processingRef.current || files.length === 0) return;
-      if (!selectedDayId) {
-        showToast.error('Please select Day first.');
-        return;
-      }
       processingRef.current = true;
 
-      const dayId = Number(selectedDayId);
+      const dayId = selectedDayId ? Number(selectedDayId) : null;
       const newItems: QueuedFile[] = files.map((file, i) => ({
         id: `${Date.now()}-${i}-${file.name}`,
         file,
@@ -171,7 +167,8 @@ export function UploadPanel({
 
         try {
           const formData = new FormData();
-          if (dayId != null) formData.append('day', String(dayId));
+          // Always append day field - send empty string if null to allow backend to handle it properly
+          formData.append('day', dayId != null ? String(dayId) : '');
           formData.append('video', item.file);
           
           // Add thumbnail if provided (use same thumbnail for all videos in batch)
@@ -235,7 +232,7 @@ export function UploadPanel({
     error: q.error,
   }));
 
-  const canUpload = selectedDayId;
+  const canUpload = true; // Day is optional, so upload is always allowed
   const isUploading = queue.some((q) => q.status === 'uploading' || q.status === 'processing');
 
   return (
