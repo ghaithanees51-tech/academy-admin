@@ -21,18 +21,6 @@ export function ThumbnailUpload({ value, onChange, disabled = false }: Thumbnail
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (file) {
-        // Validate file type
-        if (!file.type.startsWith('image/')) {
-          alert('Please select an image file (JPEG, PNG, WebP)');
-          return;
-        }
-
-        // Validate file size (10MB max)
-        if (file.size > 10 * 1024 * 1024) {
-          alert('Thumbnail file size must be less than 10MB');
-          return;
-        }
-
         onChange(file);
 
         // Create preview
@@ -78,12 +66,12 @@ export function ThumbnailUpload({ value, onChange, disabled = false }: Thumbnail
             <p className="text-xs text-gray-500 text-center px-2">
               Click to upload thumbnail
             </p>
-            <p className="text-xs text-gray-400 mt-1">JPEG, PNG, WebP (max 10MB)</p>
+            <p className="text-xs text-gray-400 mt-1">Any image file</p>
           </div>
           <input
             type="file"
             className="hidden"
-            accept="image/jpeg,image/jpg,image/png,image/webp"
+            accept="image/*"
             onChange={handleFileChange}
             disabled={disabled}
           />
