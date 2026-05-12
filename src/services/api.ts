@@ -170,6 +170,7 @@ export const apiSlice = createApi({
     'Settings',
     'StoreSettings',
     'Variants',
+    'Books',
   ],
   endpoints: () => ({}),
 });

@@ -1,21 +1,15 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
-import Dashboard from '../pages/home/Dashboard';
-import PhotosPage from '../pages/photos/PhotosPage';
-import VideosPage from '../pages/videos/VideosPage';
-import NewsPage from '../pages/news/NewsPage';
-import OpenDataPage from '../pages/open-data/OpenDataPage';
-import CompetitionPhotosPage from '../pages/competition/photos/CompetitionPhotosPage';
-import CompetitionVideosPage from '../pages/competition/videos/CompetitionVideosPage';
-import AccompanyingExhibitionPhotosPage from '../pages/accompanyingexhibition/photos/AccompanyingExhibitionPhotosPage';
-import AccompanyingExhibitionVideosPage from '../pages/accompanyingexhibition/videos/AccompanyingExhibitionVideosPage';
+import Dashboard from '../pages/Dashboard';
 import Login from '../pages/auth/Login';
 import ForgotPassword from '../pages/auth/ForgotPassword';
 import ResetPassword from '../pages/auth/ResetPassword';
-import Profile from '../pages/profile/Profile';
+import Profile from '../pages/Profile';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 import RootRedirect from './RootRedirect';
-import ChangePassword from '../pages/profile/ChangePassword';
+import ChangePassword from '../pages/ChangePassword';
+import Categories from '../pages/Categories';
+import Books from '../pages/books';
 
 
 export const router = createBrowserRouter([
@@ -55,40 +49,7 @@ export const router = createBrowserRouter([
         element: <Outlet />,
         children: [
           { index: true, element: <Dashboard /> },
-          { path: 'gallery', element: <PhotosPage /> },
         ],
-      },
-      {
-        path: 'photos',
-        element: <PhotosPage />,
-      },
-      {
-        path: 'videos',
-        element: <VideosPage />,
-      },
-      {
-        path: 'news',
-        element: <NewsPage />,
-      },
-      {
-        path: 'open-data',
-        element: <OpenDataPage />,
-      },
-      {
-        path: 'competition/photos',
-        element: <CompetitionPhotosPage />,
-      },
-      {
-        path: 'competition/videos',
-        element: <CompetitionVideosPage />,
-      },
-      {
-        path: 'accompanyingexhibition/photos',
-        element: <AccompanyingExhibitionPhotosPage />,
-      },
-      {
-        path: 'accompanyingexhibition/videos',
-        element: <AccompanyingExhibitionVideosPage />,
       },
       {
         path: 'profile',
@@ -97,7 +58,15 @@ export const router = createBrowserRouter([
       {
         path: 'profile/change-password',
         element: <ChangePassword />,
-      }
+      },
+      {
+        path: 'categories',
+        element: <Categories />,
+      },
+      {
+        path: 'books',
+        element: <Books />,
+      },
     ],
   },
 

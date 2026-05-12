@@ -1,7 +1,6 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import Sidebar from '../Sidebar';
 import Header from '../Header';
 
 interface MainLayoutProps {
@@ -11,11 +10,6 @@ interface MainLayoutProps {
 const MainLayout = ({ children }: MainLayoutProps) => {
   const { i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
-
-  const handleOverlayClick = useCallback(() => {
-    if (typeof window === 'undefined') return;
-    document.getElementById('layout')?.classList.remove('sidebar-mobile-open');
-  }, []);
 
   useEffect(() => {
     // Initialize theme from localStorage on mount
@@ -63,9 +57,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
-      <Sidebar />
-      <div className="sidebar-overlay" onClick={handleOverlayClick} role="presentation" />
-
       <div className="flex min-h-screen flex-1 flex-col">
         <Header />
         <main

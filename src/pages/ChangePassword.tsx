@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { KeyRound, Loader2, ShieldCheck, ShieldOff, Info, CheckCircle2, ArrowLeft, Eye, EyeOff } from 'lucide-react';
-import { useChangePasswordMutation } from '../../services/authApi';
-import { Card, CardHeader, CardSection } from '../../components/ui/Card';
+import { useChangePasswordMutation } from '../services/authApi';
+import { Card, CardHeader, CardSection } from '../components/ui/Card';
 
 const ChangePassword = () => {
   const { t } = useTranslation();

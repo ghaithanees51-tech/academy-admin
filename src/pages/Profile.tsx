@@ -6,9 +6,9 @@ import {
   useGetCurrentUserQuery,
   useUpdateCurrentUserMutation,
   useLogoutMutation,
-} from '../../services/authApi';
-import { useAppDispatch } from '../../store/hooks';
-import { logout as logoutAction, updateUser } from '../../store/authSlice';
+} from '../services/authApi';
+import { useAppDispatch } from '../store/hooks';
+import { logout as logoutAction, updateUser } from '../store/authSlice';
 
 const Profile = () => {
   const { t } = useTranslation();

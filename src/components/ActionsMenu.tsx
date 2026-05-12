@@ -100,7 +100,7 @@ export default function ActionsMenu({ actions, className = '' }: ActionsMenuProp
       {/* Dropdown Menu - Fixed positioning to escape table overflow */}
       <div
         ref={menuRef}
-        className="fixed min-w-[220px] bg-white rounded-lg shadow-lg border border-slate-200 z-9999 py-2"
+        className="fixed min-w-[150px] bg-white rounded-lg shadow-lg border border-slate-200 z-9999 py-2"
         style={{
           top: `${menuPosition.top}px`,
           right: `${menuPosition.right}px`,

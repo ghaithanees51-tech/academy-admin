@@ -21,14 +21,13 @@ const PageHeader = ({
   sticky = true,
   containerClassName,
 }: PropsWithChildren<PageHeaderProps>) => {
-  // Use actions if provided, otherwise fall back to action
   const actionContent = actions || action;
   
   return (
     <div
       className={`${containerClassName ?? 'max-w-8xl'} ${sticky ? 'mx-auto sticky top-0 z-10 backdrop-blur mb-2 rounded-2xl border border-slate-200 bg-white' : ''}`}     
     >
-      <div className={`mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between`}>
+      <div className={`mx-auto flex items-center justify-between`}>
         <div className="flex items-center gap-3">
           {Icon ? <Icon className="w-6 h-6 text-indigo-600" /> : null}
           <div> 

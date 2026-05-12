@@ -9,7 +9,9 @@ import {
   LogOut, 
   Search,
   Menu,
-  X
+  X,
+  Tags,
+  BookOpen
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useLogoutMutation } from '../../services/authApi';
@@ -29,10 +31,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [logout] = useLogoutMutation();
   
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const isGallery = location.pathname === '/dashboard/gallery' || location.pathname === '/photos';
-  const isVideos = location.pathname === '/videos';
-  const isNews = location.pathname === '/news';
-  const isOpenData = location.pathname === '/open-data';
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const profileRef = useRef<HTMLDivElement>(null);
@@ -95,40 +93,21 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   style={location.pathname === '/dashboard' ? { color: '#0c4261', backgroundColor: 'rgba(12, 66, 97, 0.08)' } : { color: '#6b7280' }}
                 >
                   Dashboard
+                </Link>      
+
+                <Link 
+                  to="/categories" 
+                  className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                  style={location.pathname === '/categories' ? { color: '#0c4261', backgroundColor: 'rgba(12, 66, 97, 0.08)' } : { color: '#6b7280' }}
+                >
+                  Categories
                 </Link>
                 <Link 
-                  to="/dashboard/gallery" 
-                  className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                  style={isGallery ? { color: '#0c4261', backgroundColor: 'rgba(12, 66, 97, 0.08)' } : { color: '#6b7280' }}
+                  to="/books" 
+                  className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                  style={location.pathname === '/books' ? { color: '#0c4261', backgroundColor: 'rgba(12, 66, 97, 0.08)' } : { color: '#6b7280' }}
                 >
-                  Gallery
-                </Link>
-                <Link 
-                  to="/videos" 
-                  className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                  style={isVideos ? { color: '#0c4261', backgroundColor: 'rgba(12, 66, 97, 0.08)' } : { color: '#6b7280' }}
-                >
-                  Videos
-                </Link>
-                <Link 
-                  to="/news" 
-                  className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                  style={isNews ? { color: '#0c4261', backgroundColor: 'rgba(12, 66, 97, 0.08)' } : { color: '#6b7280' }}
-                >
-                  News
-                </Link>
-                <Link 
-                  to="/open-data" 
-                  className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                  style={isOpenData ? { color: '#0c4261', backgroundColor: 'rgba(12, 66, 97, 0.08)' } : { color: '#6b7280' }}
-                >
-                  Open Data
-                </Link>
-                <Link 
-                  to="/profile" 
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
-                >
-                  Profile
+                  Books
                 </Link>
               </div>
             </div>
@@ -235,40 +214,20 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 Dashboard
               </Link>
               <Link
-                to="/dashboard/gallery"
-                className="block px-4 py-2 rounded-lg text-sm font-medium"
-                style={isGallery ? { color: '#0c4261', backgroundColor: 'rgba(12, 66, 97, 0.08)' } : { color: '#6b7280' }}
+                to="/categories"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600"
                 onClick={() => setShowMobileMenu(false)}
               >
-                Gallery
+                <Tags className="h-4 w-4" />
+                Categories
               </Link>
               <Link
-                to="/videos"
-                className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600"
+                to="/books"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600"
                 onClick={() => setShowMobileMenu(false)}
               >
-                Videos
-              </Link>
-              <Link
-                to="/news"
-                className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600"
-                onClick={() => setShowMobileMenu(false)}
-              >
-                News
-              </Link>
-              <Link
-                to="/open-data"
-                className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600"
-                onClick={() => setShowMobileMenu(false)}
-              >
-                Open Data
-              </Link>
-              <Link
-                to="/profile"
-                className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600"
-                onClick={() => setShowMobileMenu(false)}
-              >
-                Profile
+                <BookOpen className="h-4 w-4" />
+                Books
               </Link>
               <button
                 onClick={handleLanguageToggle}
@@ -285,7 +244,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       </nav>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <main className="mx-auto max-w-7xl px-0 sm:px-0 lg:px-0 py-8">
         {children}
       </main>
     </div>
