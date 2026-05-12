@@ -103,6 +103,31 @@ export interface ChangePasswordResponse {
   message: string;
 }
 
+const normalizeUserResponse = (response: any): User => {
+  const u = response || {};
+  const firstName = u.first_name ?? '';
+  const lastName = u.last_name ?? '';
+  // Prefer backend-provided ``name`` (UserSerializer computes it), otherwise
+  // fall back to assembling it from first/last name or the email.
+  const name =
+    (typeof u.name === 'string' && u.name.trim()) ||
+    [firstName, lastName].filter(Boolean).join(' ') ||
+    u.email ||
+    '';
+  return {
+    id: u.id,
+    email: u.email,
+    name,
+    first_name: firstName,
+    last_name: lastName,
+    phone_number: u.phone_number ?? '',
+    role: u.role ?? 'staff',
+    is_active: u.is_active !== false,
+    stores: [],
+    permissions: {} as UserPermissions,
+  } as User;
+};
+
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
@@ -152,23 +177,7 @@ export const authApi = apiSlice.injectEndpoints({
 
     getCurrentUser: builder.query<User, void>({
       query: () => 'auth/me/',
-      transformResponse: (response: any) => {
-        const u = response || {};
-        const firstName = u.first_name ?? '';
-        const lastName = u.last_name ?? '';
-        const name = [firstName, lastName].filter(Boolean).join(' ') || u.email || '';
-        return {
-          id: u.id,
-          email: u.email,
-          name,
-          first_name: firstName,
-          last_name: lastName,
-          role: u.role ?? 'staff',
-          is_active: u.is_active !== false,
-          stores: [],
-          permissions: {} as UserPermissions,
-        } as User;
-      },
+      transformResponse: (response: any) => normalizeUserResponse(response),
       providesTags: ['User'],
     }),
 
@@ -178,6 +187,7 @@ export const authApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: payload,
       }),
+      transformResponse: (response: any) => normalizeUserResponse(response),
       invalidatesTags: ['User'],
     }),
 

@@ -1,4 +1,4 @@
-import { useMemo, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react';
 import { BookOpen, BrainCircuit, CheckCircle2, ChevronLeft, ChevronRight, Filter, Loader2, Pencil, Plus, RefreshCcw, Search, ScanText, Trash2, X } from 'lucide-react';
 
 const PAGE_SIZE = 20;
@@ -49,7 +49,7 @@ const extractApiMessage = (error: unknown, fallback: string) => {
 
 type FormState = {
   type: 'pdf' | 'audio' | 'video';
-  category: 'book' | 'publication' | 'research';
+  category: string;
   title: string;
   author: string;
   publisher: string;
@@ -62,7 +62,7 @@ type FormState = {
 
 const initialFormState: FormState = {
   type: 'pdf',
-  category: 'book',
+  category: '',
   title: '',
   author: '',
   publisher: '',
@@ -334,7 +334,7 @@ const Books = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState<'' | 'book' | 'publication' | 'research'>('');
+  const [categoryFilter, setCategoryFilter] = useState<string>('');
   const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [statusMessage, setStatusMessage] = useState<StatusMessage | null>(null);
@@ -353,24 +353,17 @@ const Books = () => {
 
   const totalBooks = useMemo(() => books.length, [books]);
   const categoryOptions = useMemo(
-    () => {
-      const backendOptions = categories
+    () =>
+      categories
         .filter((category) => category.status === 'active')
         .map((category) => ({
-          value: category.slug as 'book' | 'publication' | 'research',
+          value: category.slug,
           label: category.category_name,
-        }));
-
-      return backendOptions.length > 0
-        ? backendOptions
-        : [
-            { value: 'book' as const, label: 'Book' },
-            { value: 'publication' as const, label: 'Publication' },
-            { value: 'research' as const, label: 'Research' },
-          ];
-    },
+        })),
     [categories]
   );
+
+  const hasCategories = categoryOptions.length > 0;
 
   const filteredBooks = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -399,7 +392,7 @@ const Books = () => {
     setCurrentPage(1);
   };
 
-  const handleCategoryFilterChange = (value: '' | 'book' | 'publication' | 'research') => {
+  const handleCategoryFilterChange = (value: string) => {
     setCategoryFilter(value);
     setCurrentPage(1);
   };
@@ -422,9 +415,24 @@ const Books = () => {
   const handleOpenCreate = () => {
     setEditingBook(null);
     resetForm();
+    setFormValues((current) => ({
+      ...current,
+      category: categoryOptions[0]?.value ?? '',
+    }));
     setStatusMessage(null);
     setIsOffcanvasOpen(true);
   };
+
+  // If the offcanvas is open for creation and categories load late, fill in
+  // a sensible default so the user never submits an empty slug.
+  useEffect(() => {
+    if (!isOffcanvasOpen || editingBook) return;
+    if (formValues.category) return;
+    const fallback = categoryOptions[0]?.value;
+    if (fallback) {
+      setFormValues((current) => ({ ...current, category: fallback }));
+    }
+  }, [isOffcanvasOpen, editingBook, formValues.category, categoryOptions]);
 
   const handleOpenEdit = (book: Book) => {
     setEditingBook(book);
@@ -490,6 +498,14 @@ const Books = () => {
 
     if (!formValues.title.trim() || !formValues.author.trim()) {
       setStatusMessage({ type: 'error', text: 'Title and author are required.' });
+      return;
+    }
+
+    if (!formValues.category) {
+      setStatusMessage({
+        type: 'error',
+        text: 'Please pick a category. Create one first on the Categories page if the list is empty.',
+      });
       return;
     }
 
@@ -592,7 +608,9 @@ const Books = () => {
             <button
               type="button"
               onClick={handleOpenCreate}
-              className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500"
+              disabled={!hasCategories}
+              title={hasCategories ? undefined : 'Create at least one category first.'}
+              className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-indigo-600"
             >
               <Plus className="h-4 w-4" />
               Add Book
@@ -644,7 +662,7 @@ const Books = () => {
             <Filter className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <select
               value={categoryFilter}
-              onChange={(e) => handleCategoryFilterChange(e.target.value as '' | 'book' | 'publication' | 'research')}
+              onChange={(e) => handleCategoryFilterChange(e.target.value)}
               className="h-10 rounded-xl border border-slate-200 bg-white pl-9 pr-8 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             >
               <option value="">All categories</option>
@@ -998,19 +1016,34 @@ const Books = () => {
             </div>
             <div>
               <label htmlFor="book-category" className="mb-1 block text-sm font-medium text-slate-700">
-                Category
+                Category <span className="text-red-500">*</span>
               </label>
               <select
                 id="book-category"
                 value={formValues.category}
                 onChange={(event) => handleFieldChange('category', event.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                disabled={!hasCategories}
+                required
+                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
               >
-                {categoryOptions.map((category) => (
-                  <option key={category.value} value={category.value}>
-                    {category.label}
+                {hasCategories ? (
+                  <>
+                    {!formValues.category && (
+                      <option value="" disabled>
+                        Select a category…
+                      </option>
+                    )}
+                    {categoryOptions.map((category) => (
+                      <option key={category.value} value={category.value}>
+                        {category.label}
+                      </option>
+                    ))}
+                  </>
+                ) : (
+                  <option value="" disabled>
+                    No categories — create one first
                   </option>
-                ))}
+                )}
               </select>
             </div>
             <div>

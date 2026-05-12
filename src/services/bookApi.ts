@@ -3,7 +3,7 @@ import { apiSlice } from './api';
 export interface Book {
   id: number;
   type: 'pdf' | 'audio' | 'video';
-  category: 'book' | 'publication' | 'research';
+  category: string;
   title: string;
   author: string;
   publisher: string;
@@ -40,7 +40,7 @@ export interface ExtractionResult {
 
 export interface BookPayload {
   type?: 'pdf' | 'audio' | 'video';
-  category?: 'book' | 'publication' | 'research';
+  category?: string;
   title: string;
   author: string;
   publisher?: string;
