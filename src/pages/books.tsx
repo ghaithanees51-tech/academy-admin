@@ -215,7 +215,7 @@ function ExtractionModal({
             key={t}
             type="button"
             onClick={() => handleTabChange(t)}
-            className={`pb-3 pr-5 text-sm font-semibold border-b-2 transition-colors ${
+            className={`px-4 pb-2 pt-2 text-sm font-semibold border-b-2 transition-colors ${
               tab === t
                 ? 'border-indigo-600 text-indigo-600'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
