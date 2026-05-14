@@ -471,7 +471,7 @@ const Books = () => {
     payload.append('type', formValues.type);
     payload.append('category', formValues.category);
     payload.append('title', formValues.title.trim());
-    payload.append('author', formValues.author.trim());
+    if (formValues.author.trim()) payload.append('author', formValues.author.trim());
     if (formValues.publisher.trim()) payload.append('publisher', formValues.publisher.trim());
     if (formValues.edition.trim()) payload.append('edition', formValues.edition.trim());
     if (formValues.year.trim()) payload.append('year', formValues.year.trim());
@@ -496,8 +496,8 @@ const Books = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!formValues.title.trim() || !formValues.author.trim()) {
-      setStatusMessage({ type: 'error', text: 'Title and author are required.' });
+    if (!formValues.title.trim()) {
+      setStatusMessage({ type: 'error', text: 'Title is required.' });
       return;
     }
 
@@ -988,7 +988,7 @@ const Books = () => {
             </div>
             <div>
               <label htmlFor="book-author" className="mb-1 block text-sm font-medium text-slate-700">
-                Author <span className="text-red-500">*</span>
+                Author
               </label>
               <input
                 id="book-author"
@@ -996,7 +996,6 @@ const Books = () => {
                 value={formValues.author}
                 onChange={(event) => handleFieldChange('author', event.target.value)}
                 className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-                required
               />
             </div>
             <div>
